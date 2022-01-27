@@ -1,11 +1,26 @@
 <script >
 
 export default {
- emits: ["de-render"],
+ emits: ["de-render", "revalidate"],
  data: () => ({
     title: '',
-    description: ''
-  })
+    description: '',
+    completed: false
+  }),
+  methods: {
+    async saveNewTask(title, description) {
+      const data = { title, description, completed: false }
+      await fetch('https://vue-todo-tasks.herokuapp.com/api/tasks', {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+    this.$emit("revalidate")
+    this.$emit("de-render")
+    }
+  }
 }
 </script>
 
@@ -17,16 +32,18 @@ export default {
                     class="input-modal"
                     type="text" 
                     placeholder="Qual o título?"
+                    v-model="title"
                 />
                 <textarea 
                     class="input-modal"
                     type="textarea" 
                     placeholder="tem descrição?"
+                    v-model="description"
                 />
             </div>
             <div class="container-button">
                 <button class="button-modal " @click="$emit('de-render')"> x </button>
-                <button class="button-modal"> C </button>
+                <button class="button-modal" @click="saveNewTask(title, description)"> C </button>
             </div> 
         </div>
     </div>
@@ -40,13 +57,15 @@ export default {
         height: 100%;
         background-color: rgba(0,0,0,0.4);
         position: fixed;
+        top:0;
+        left:0;
         z-index: 2;
         display: flex;
         justify-content: center;
         align-items: center;
     }
     .show-modal{
-        width: 50%;
+        width: 30%;
         background-color: #fff;
         display: block;
         align-items: center;

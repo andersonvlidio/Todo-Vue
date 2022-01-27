@@ -3,7 +3,6 @@ import Modal from './Modal.vue'
 
 export default {
  data: () => ({
-    name: "Anderson",
     visible: false
   }),
   methods: {
@@ -18,7 +17,7 @@ export default {
 </script>
 
 <template>
-    <Modal v-if="visible" @de-render="toggleModal" />
+    <Modal v-if="visible" @de-render="toggleModal" @revalidate="$emit('revalidate')" />
     <div class= "header">
       <h1> Qual a de hoje? </h1>
       <button class="new-task" @click="toggleModal"> Nova Tarefa </button>

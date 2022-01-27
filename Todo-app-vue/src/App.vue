@@ -1,13 +1,37 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import CardItems from './components/CardItems.vue'
 import Header from './components/Header.vue'
 
+export default {
+ data: () => ({
+   items: [],
+    title: '',
+    description: '',
+    completed: false
+  }),
+  methods: {
+    async reRender () {
+      const response = await fetch('https://vue-todo-tasks.herokuapp.com/api/tasks');
+      const data = await response.json();
+      this.items = data
+    }
+  },
+  async created() {
+      const response = await fetch('https://vue-todo-tasks.herokuapp.com/api/tasks');
+      const data = await response.json();
+      this.items = data
+    },
+  components: {
+    Header,
+    CardItems
+  }
+}
 </script>
 
 <template>
   <div class="main-app">
-    <Header/>
-    <HelloWorld msg="Hello Vue 3 + Vite" />
+    <Header @revalidate="reRender"/>
+    <CardItems @revalidate="reRender" :items="items" />
   </div>
 </template>
 

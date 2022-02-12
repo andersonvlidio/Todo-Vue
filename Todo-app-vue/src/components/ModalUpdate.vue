@@ -1,18 +1,13 @@
 <script >
-import {XIcon, PlusIcon} from '@heroicons/vue/outline'
+import {XIcon, RefreshIcon} from '@heroicons/vue/outline'
 export default {
  emits: ["de-render", "revalidate"],
  props: ['item'],
- data: () => ({
-    title: '',
-    description: '',
-    completed: false
-  }),
   methods: {
-    async saveNewTask(title, description) {
-      const data = { title, description, completed: false }
-      await fetch('https://vue-todo-tasks.herokuapp.com/api/tasks', {
-        method: "POST",
+    async updateItem() {
+      const data = { title: this.item.title, description: this.item.description, completed: false }
+      await fetch(`https://vue-todo-tasks.herokuapp.com/api/tasks/${this.item.id}`, {
+        method: "PUT",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json"
@@ -23,9 +18,9 @@ export default {
     }
   },
   components: { 
-     XIcon,
-     PlusIcon
-    }
+    XIcon,
+    RefreshIcon
+  }
 }
 </script>
 
@@ -33,24 +28,25 @@ export default {
     <div class="main-modal">
         <div class="show-modal">
             <div class="container-input">
-                <div class="header-element">
+                <div class="element-header">
                     <input 
                     class="input-modal"
                     type="text" 
-                    placeholder="what's the title?"
-                    v-model="title"
+                    placeholder="Qual o título?"
+                    v-model="item.title"
                     />
-                    <button class="button-modal close" @click="$emit('de-render')"> <XIcon /></button>
+                    <button class="button-modal close" @click="$emit('de-render')"> <XIcon /> </button>
                 </div>
                 <textarea 
                     class="input-modal"
                     type="textarea" 
-                    placeholder="do you have description?"
-                    v-model="description"
+                    placeholder="tem descrição?"
+                    v-model="item.description"
                 />
             </div>
             <div class="container-button">
-                <button class="button-modal create" @click="saveNewTask(title, description)"> <PlusIcon /> </button>
+                
+                <button class="button-modal update" @click="updateItem()"> <RefreshIcon /> </button>
             </div> 
         </div>
     </div>
@@ -79,13 +75,13 @@ export default {
         justify-content: center;
         border-radius: 0.5rem;
     }
+    .element-header{
+        display: flex;
+        justify-content: space-between;
+    }
     .container-input{
         display: block;
         width: 100%;
-    }
-    .header-element{
-        display: flex;
-        justify-content: space-between;
     }
     .input-modal {
         all : unset;
@@ -97,13 +93,11 @@ export default {
         padding: 16px 0;
         text-decoration: none;
         margin: 4px 0;
-        text-align: left;
-        
+        text-align: left
     }
     .input-modal::placeholder {
         font-weight: 700;
-        font-size: 26px;
-        padding-left: 10px;
+        font-size: 26px
     }
     .container-button{
         display: flex;
@@ -121,7 +115,7 @@ export default {
     .close:hover{
     color:#d42c2c;
     }
-    .create:hover{
+    .update:hover{
         color: #084510;
     }
 

@@ -1,27 +1,14 @@
 <script >
-import Modal from './Modal.vue'
-
-export default {
- data: () => ({
-    visible: false
-  }),
-  methods: {
-    toggleModal () {
-      this.visible = !this.visible
-    }
-  },
-  components: {
-    Modal
+  export default {
+    emits: ["render"]
   }
-}
 </script>
 
 <template>
-    <Modal v-if="visible" @de-render="toggleModal" @revalidate="$emit('revalidate')" />
-    <div class= "header">
-      <h1> Qual a de hoje? </h1>
-      <button class="new-task" @click="toggleModal"> Nova Tarefa </button>
-    </div>
+  <div class= "header">
+    <h1> what's up today?</h1>
+    <button class="new-task" @click="$emit('render')"> New task </button>
+  </div>
 </template>
 
 <style scoped>
@@ -35,15 +22,17 @@ export default {
 }
 .new-task {
   all : unset;
-  background-color: #006400;
+  background-color: #084510;
   color: #fff;
+  border: 1px solid #084510;
   border-radius: 0.5rem;
   cursor: pointer;
   padding: 8px 16px;
   height: 26px;
 }
 .new-task:hover {
-  box-shadow: 8px 9px 30px -4px #006435;
-  transition-duration: .3s;
+  background-color: rgb(241 245 249);
+  color: #084510;
+  transition-duration: 0.5s;
 }
 </style>
